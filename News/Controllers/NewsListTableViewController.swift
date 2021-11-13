@@ -8,44 +8,49 @@
 import UIKit
 
 class NewsListTableViewController: UITableViewController {
-
+    private var articleListVM: ArticleListViewModel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us&apiKey=2b823cb27e30476d9de6759791d488ca")!
         
-        WebService().getArticles(url: url) { _ in
-            
+        WebService().getArticles(url: url) {  articles in
+            if let articles = articles {
+                self.articleListVM = ArticleListViewModel(articles: articles)
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
             
         }
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return self.articleListVM == nil ? 0 : self.articleListVM.numberOfSections
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return self.articleListVM == nil ? 0 : self.articleListVM.numberOfRowsInSection(section)
     }
 
-    /*
+ 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleTableViewCell", for: indexPath) as! ArticleTableViewCell
+        let article = articleListVM.articleAtIndex(indexPath.row)
+        
+        cell.titleLabel.text? = article.title
+        cell.descriptionLabel.text? = article.description ?? "No Description for article"
 
-        // Configure the cell...
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
