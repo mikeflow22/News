@@ -6,8 +6,12 @@
 //
 
 import Foundation
+//top level for json based on api documentation
+struct ArticleList: Decodable {
+    let articles: [Article]
+}
 
 struct Article: Decodable {
     let title: String
-    let description: String
+    let description: String?
 }
