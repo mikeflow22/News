@@ -12,6 +12,12 @@ class NewsListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us&apiKey=2b823cb27e30476d9de6759791d488ca")!
+        
+        WebService().getArticles(url: url) { _ in
+            
+            
+        }
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
